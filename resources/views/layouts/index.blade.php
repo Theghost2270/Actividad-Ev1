@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,9 +7,8 @@
     <title>Community App</title>
     <style>
         body {
-            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #1a1a1a;
-            color: rgb(255, 255, 255);
+            font-family: Arial, sans-serif;
+            background-color:rgb(14, 17, 19);
             margin: 0;
             padding: 0;
         }
@@ -16,7 +16,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: rgba(106, 41, 236, 0.864);
+            background-color:rgba(21, 25, 29, 0.74);
             padding: 10px 20px;
         }
         .header h1 {
@@ -32,7 +32,7 @@
             align-items: center;
             gap: 10px;
             padding: 10px;
-            background-color: #333;
+            background-color: rgba(21, 25, 29, 0.74);
             border-radius: 5px;
             margin: 10px;
         }
@@ -55,11 +55,13 @@
         }
         .event-list {
             padding: 10px;
+            color: white;
         }
         .event-item {
-            background-color: rgba(109, 64, 255, 0.778);
+            background-color:rgba(24, 26, 29, 0.74);
             padding: 20px;
             margin: 30px;
+            color: white;
             border-radius: 10px;
             cursor: pointer;
         }
@@ -80,50 +82,93 @@
         .img_header1{
             width: 30px;
         }
+        .link a {
+            color:rgb(152, 176, 199);
+            text-decoration: none;
+        }
+        .button {
+            width: 10%;
+            padding: 5px;
+            background-color: black;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
     </style>
-</head>
-<body>
-    <div class="header">
-        <span>👤 {{ Auth::user()->name }}</span>
-        <h1><a href="#"><img class="img_header" src="https://i.ibb.co/KjB2J0DH/Comm-3-removebg-preview.png" alt="Community App"></a></h1>
-        <div class="icons">
-            <a href="{{ route('event.create') }}"><img class="img_header1" src="https://cdn-icons-png.flaticon.com/128/1237/1237946.png" alt="Crear Evento"></a>
-            <form action="{{ route('logout') }}" method="POST">
-                @csrf
-                <button style="background: none; border: none; color: white; cursor: pointer;">🚪 Cerrar sesión</button>
-            </form>
-        </div>
-    </div>
-
-    <div class="search-container">
-        <input type="text" placeholder="Buscar eventos...">
-        <button>🔍</button>
-        <button>⚙</button>
-    </div>
-     
-    @section('content')
-
-<div class="container">
-    <h1>Lista de Eventos</h1>
-    <a href="{{ route('events.create') }}" class="btn btn-primary">Crear Nuevo Evento</a>
-
     @if(session('success'))
-        <p style="color: green;">{{ session('success') }}</p>
+        <div style="color: green;">
+            {{ session('success') }}
+        </div>
     @endif
 
-    <div class="event-list">
-    @foreach ($events as $event)
-    <div class="event-item">
-        <h2>{{ $event->titulo }}</h2>
-        <p>{{ $event->descripcion }}</p>
-        <p><strong>Costo:</strong> ${{ $event->costo }}</p>
-        <p><strong>Edad mínima:</strong> {{ $event->edad_minima }}</p>
-        <p><strong>Categoría:</strong> {{ $event->tematica }}</p>
-        <p><strong>Usuario:</strong> {{ $event->organizador }}</p>
+    @if(session('error'))
+        <div style="color: red;">
+            {{ session('error') }}
+        </div>
+    @endif
+
+</head>
+<body>
+@section('content')
+<div class="header">
+    <span class="link">👤 <a href="{{ route('profile.show') }}">{{ Auth::user()->name }}</a></span>
+    <h1><a href="#"><img class="img_header" src="https://i.ibb.co/KjB2J0DH/Comm-3-removebg-preview.png" alt="Community App"></a></h1>
+    <div class="icons">
+        <a href="{{ route('events.create') }}"><img class="img_header1" src="https://cdn-icons-png.flaticon.com/128/1237/1237946.png" alt="Crear Evento"></a>
+        <form action="{{ route('logout') }}" method="POST">
+            @csrf
+            <button style="background: none; border: none; color: white; cursor: pointer;">🚪 Cerrar sesión</button>
+        </form>
     </div>
-    @endforeach
+</div>
+<form  method="GET" action="{{ route('events.index') }}">
+    <div style="color: White;" class="search-container">
+    <label  for="tematica">Filtrar por temática:</label>
+        <select name="tematica" id="tematica">
+            <option value="">Selecciona una temática</option>
+            @foreach($tematicas as $tematica)
+                <option value="{{ $tematica->tematica }}" 
+                        {{ request('tematica') == $tematica->tematica ? 'selected' : '' }}>
+                    {{ $tematica->tematica }}
+                </option>
+            @endforeach
+        </select>
+        <input type="text" id="search" name="search" value="{{ request('search') }}" placeholder="Buscar evento...">
+        <button type="submit">Filtrar</button>
+    </div>
+</form>
+<div class="container">
+    
+
+    <div class="event-list">
+        @if ($events->isEmpty())
+            <p>No hay eventos disponibles aún.</p>
+        @else
+            @foreach ($events as $event)
+                <div class="event-item">
+                    <h2 class="link"><a  href="{{ route('events.show', $event->id_evento) }}">{{ $event->titulo }}</a></h2>
+                    <p>{{ $event->descripcion }}</p>
+                    <p><strong>Costo:</strong> ${{ $event->costo }}</p>
+                    <p><strong>Edad mínima:</strong> {{ $event->edad_minima }}</p>
+                    <p><strong>Categoría:</strong> {{ $event->tematica }}</p>
+                    <p><strong>Organizador:</strong> {{ $event->organizador }}</p>
+                    <p><strong>Publicado por:</strong> {{ $event->user ? $event->user->name : 'Desconocido' }}</p>
+                    <p><strong>Contacto:</strong> {{ $event->contacto }}</p>
+                    @if (auth()->check() && auth()->user()->id === $event->user_id)
+                    <form action="{{ route('events.destroy', $event->id_evento) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button class="button" type="submit">Eliminar</button>
+                    </form>
+                    @endif
+                </div>
+            @endforeach
+        @endif
+    </div>
 </div>
 
-@endsection
 </body>
 </html>
+

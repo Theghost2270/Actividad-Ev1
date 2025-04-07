@@ -14,8 +14,16 @@ class Event extends Model
     public $timestamps = false;
     
     protected $fillable = [
-        'titulo', 'descripcion', 'organizador', 'costo', 'edad_minima', 'tematica', 'fecha', 'hora', 'ubicacion', 'contacto'
+        'titulo', 'descripcion', 'organizador', 'costo', 'edad_minima', 'tematica', 'fecha', 'hora', 'ubicacion', 'contacto', 'user_id'
     ];
+    
+    
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    //public function comments(){   return $this->hasMany(Comment::class, 'event_id'); // Asegúrate de que el campo 'event_id' exista en la tabla 'comments' }
     
     public function organizador()
     {

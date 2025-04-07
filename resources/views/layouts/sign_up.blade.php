@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #1a1a1a;
+            background-color:rgb(14, 17, 19);
             color: white;
             display: flex;
             justify-content: center;
@@ -20,7 +20,7 @@
             width: 320px;
         }
         h1 {
-            background-color: #8a2be2;
+            background-color:rgba(21, 25, 29, 0.74);
             color: white;
             padding: 10px;
             border-radius: 10px;
@@ -67,6 +67,10 @@
         .birthday-group input {
             width: 30%;
         }
+        .register-link a {
+            color:rgb(152, 176, 199);
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
@@ -81,7 +85,10 @@
             <div class="data-group">
                 <input type="text" name="username" placeholder="Username" required>
                 <input type="email" name="email" placeholder="Email" required>
-                <input type="tel" name="phone" placeholder="Phone Number" required>
+                <input id="phone" name="phone" type="text" required autofocus />
+                @error('phone')
+                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                @enderror
             </div>
             <div class="birthday-group">
                 <input type="text" name="day" placeholder="DD" required>

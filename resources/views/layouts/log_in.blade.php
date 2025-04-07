@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #1a1a1a;
+            background-color:rgb(14, 17, 19);
             color: white;
             display: flex;
             justify-content: center;
@@ -20,7 +20,7 @@
             width: 300px;
         }
         h1 {
-            background-color: #8a2be2;
+            background-color:rgba(21, 25, 29, 0.74);
             color: white;
             padding: 10px;
             border-radius: 10px;
@@ -78,7 +78,7 @@
             font-size: 14px;
         }
         .register-link a {
-            color: #8a2be2;
+            color:rgb(152, 176, 199);
             text-decoration: none;
         }
         .register-link a:hover {
@@ -95,11 +95,7 @@
             <input type="password" name="password" placeholder="Password" required>
             <button type="submit" class="button">Log in with email</button>
         </form>
-        <div class="separator"><span>or continue with</span></div>
-        <div class="social-icons">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Gmail_icon_%282020%29.svg/1200px-Gmail_icon_%282020%29.svg.png" alt="Gmail">
-            <img src="https://apen.es/wp-content/uploads/2020/11/Microsoft_Outlook_2013_logo.svg_.png" alt="Outlook">
-        </div>
+        
         <div class="register-link">Don't have an account? <a href="{{ route('sign_up') }}">Sign Up</a></div>
     </div>
 </body>

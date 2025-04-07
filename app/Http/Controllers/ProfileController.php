@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Models\Event;
 
 class ProfileController extends Controller
 {
@@ -35,6 +36,20 @@ class ProfileController extends Controller
         $request->user()->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
+    }
+
+    public function show()
+    {
+        // Obtener el usuario autenticado
+        $user = Auth::user();
+        $events = $user->events;// Obtiene los eventos del usuario autenticado
+        
+
+        // Obtener los eventos creados por el usuario
+        //$events = Event::where('user_id', $user->id)->get();
+
+        // Devolver la vista con la información del usuario y sus eventos
+        return view('layouts.profile', compact('user', 'events'));
     }
 
     /**
