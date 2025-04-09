@@ -10,11 +10,11 @@ class Event extends Model
     use HasFactory;
     
     protected $table = 'events';
-    protected $primaryKey = 'id_evento';
+    protected $primaryKey = 'id';
     public $timestamps = false;
     
     protected $fillable = [
-        'titulo', 'descripcion', 'organizador', 'costo', 'edad_minima', 'tematica', 'fecha', 'hora', 'ubicacion', 'contacto', 'user_id'
+        'id_evento', 'titulo', 'descripcion', 'organizador', 'costo', 'edad_minima', 'tematica', 'fecha', 'hora', 'ubicacion', 'contacto', 'user_id'
     ];
     
     
@@ -34,14 +34,10 @@ class Event extends Model
     {
         return $this->belongsTo(Tematica::class, 'tematica');
     }
-    
-    public function asistentes()
+
+    public function comentarios()
     {
-        return $this->hasMany(Asistencia::class, 'id_evento');
+        return $this->hasMany(Comentario::class, 'id_evento', 'id_evento');
     }
-    
-    public function preguntas()
-    {
-        return $this->hasMany(Pregunta::class, 'id_evento');
-    }
+
 }

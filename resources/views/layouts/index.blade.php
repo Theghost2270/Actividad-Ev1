@@ -97,17 +97,7 @@
             cursor: pointer;
         }
     </style>
-    @if(session('success'))
-        <div style="color: green;">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    @if(session('error'))
-        <div style="color: red;">
-            {{ session('error') }}
-        </div>
-    @endif
+   
 
 </head>
 <body>
@@ -140,6 +130,17 @@
     </div>
 </form>
 <div class="container">
+@if(session('success'))
+    <div id="successMessage" style="color: green;">
+        {{ session('success') }}
+    </div>
+@endif
+
+@if(session('error'))
+    <div id="errorMessage" style="color: red;">
+        {{ session('error') }}
+    </div>
+@endif
     
 
     <div class="event-list">
@@ -170,5 +171,14 @@
 </div>
 
 </body>
+<script>
+    // Ocultar mensajes después de 3 segundos (3000 milisegundos)
+    setTimeout(() => {
+        const successMsg = document.getElementById('successMessage');
+        const errorMsg = document.getElementById('errorMessage');
+        if (successMsg) successMsg.style.display = 'none';
+        if (errorMsg) errorMsg.style.display = 'none';
+    }, 3000); // Puedes cambiar este tiempo si quieres más/menos segundos
+</script>
 </html>
 

@@ -47,5 +47,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(Event::class, 'user_id', 'id'); 
     }
+    
+    public function comentarios()
+    {
+        return $this->hasMany(Comentario::class);
+    }
+
 
 }

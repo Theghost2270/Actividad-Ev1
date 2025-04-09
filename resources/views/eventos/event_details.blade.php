@@ -59,17 +59,33 @@
             width: 30px;
         }
         .comment-section {
-            margin-top: 30px;
-            padding: 10px;
-            background-color: rgba(109, 64, 255, 0.778);
+            background-color: rgba(48, 48, 48, 0.77);
+            padding: 30px;
+            margin: 30px;
+            color: white;
             border-radius: 10px;
+            cursor: pointer;
         }
         .comment-section h3 {
             font-size: 18px;
             margin-bottom: 10px;
         }
+        .comment-section button {
+            width: 10%;
+            padding: 10px;
+            background-color: black;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 1px;
+        }
+        .comment-section button:hover {
+            background-color: #333;
+        }
         .comment-box {
-            width: 100%;
+            width: 50%;
             padding: 10px;
             margin-bottom: 10px;
             border-radius: 5px;
@@ -94,6 +110,7 @@
             color:rgb(152, 176, 199);
             text-decoration: none;
         }
+        
         
     </style>
 </head>
@@ -122,7 +139,55 @@
             <p><strong>Contacto:</strong> {{ $event->contacto }}</p>
         </div>
 
+<div class="comment-section">
+    
+
+    <!-- Formulario para agregar comentario -->
+    <form method="POST" action="{{ route('comentarios.store', $event->id_evento) }}">
+
+        @csrf
+        <textarea name="contenido" class="comment-box" placeholder="Escribe tu comentario aquí..." required></textarea>
+        <button type="submit">
+            Comentar
+        </button>
+    </form>
+<h3>Comentarios</h3>
+    @if (session('success'))
+    <div id="successMessage" class="alert alert-success" style="color: green;">{{ session('success') }}</div>
+    @elseif (session('error'))
+        <div id="errorMessage" class="alert alert-danger" style="color: red;">{{ session('error') }}</div>
+    @endif
+
+    
+    <!-- Lista de comentarios -->
+    @foreach ($comentarios as $comentario)
+    <div class="comment-item">
+        <p><strong>Publicado por:</strong> {{ $comentario->usuario->name }}</p>
+        <p>{{ $comentario->contenido }}</p>
+        <small>{{ $comentario->created_at->format('d M Y H:i') }}</small>
+        <!-- Verifica si el comentario pertenece al usuario autenticado -->
+        @if (auth()->check() && auth()->user()->id === $comentario->user_id)
+            <!-- Formulario para eliminar el comentario -->
+            <form action="{{ route('comentarios.destroy', $comentario->id) }}" method="POST" style="display:inline;">
+                @csrf
+                @method('DELETE')
+                <button type="submit">Eliminar</button>
+            </form>
+        @endif
     </div>
+@endforeach
+
+</div>
+
 </body>
+<script>
+    // Ocultar mensajes después de 3 segundos (3000 milisegundos)
+    setTimeout(() => {
+        const successMsg = document.getElementById('successMessage');
+        const errorMsg = document.getElementById('errorMessage');
+        if (successMsg) successMsg.style.display = 'none';
+        if (errorMsg) errorMsg.style.display = 'none';
+    }, 3000); // Puedes cambiar este tiempo si quieres más/menos segundos
+</script>
 </html>
 

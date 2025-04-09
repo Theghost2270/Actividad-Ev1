@@ -30,7 +30,8 @@ return new class extends Migration
     public function up()
 {
     Schema::create('events', function (Blueprint $table) {
-        $table->id('id_evento');
+        $table->id();  // La columna 'id' es la clave primaria autoincremental.
+        $table->string('id_evento')->unique();
         $table->foreignId('user_id')->constrained()->onDelete('cascade');
         $table->string('titulo');
         $table->text('descripcion')->nullable();

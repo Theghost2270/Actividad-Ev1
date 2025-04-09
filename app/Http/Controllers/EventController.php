@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Event;
+use App\Models\Comentario;
 use Illuminate\Support\Facades\Auth;
 
 class EventController extends Controller
@@ -12,12 +13,10 @@ class EventController extends Controller
     public function index(Request $request)
     {
         $query = Event::query();
-    
         // Filtro por temática
         if ($request->has('tematica') && $request->tematica != '') {
             $query->where('tematica', $request->tematica);
         }
-    
         // Búsqueda por nombre o descripción
         if ($request->has('search') && $request->search != '') {
             $query->where(function ($q) use ($request) {
@@ -25,26 +24,22 @@ class EventController extends Controller
                   ->orWhere('description', 'like', '%' . $request->search . '%');
             });
         }
-    
         $events = $query->get(); // Todos los eventos filtrados
         $tematicas = Event::select('tematica')->distinct()->get(); // Lista para el select de filtros
-    
         // Aquí eliges tu vista real
         return view('layouts.index', compact('events', 'tematicas'));
     }
     
-
-    
-    public function show($event_id)
+    public function show($id_evento)
     {
-        $event = Event::findOrFail($event_id);
-        //$event = Event::with('comments.user')->findOrFail($event_id);
-        return view('event_details', compact('event'));
+        $event = Event::where('id_evento', $id_evento)->firstOrFail();
+        $comentarios = $event->comentarios()->with('usuario')->latest()->get();
+        return view('eventos.event_details', compact('event', 'comentarios'));
     }
+
     public function create()
     {
-        //return view('events.create');
-        return view('layouts.event_creation');    
+        return view('eventos.event_creation');    
     }
 
     public function store(Request $request)
@@ -61,7 +56,10 @@ class EventController extends Controller
             'ubicacion' => 'nullable|string',
         ]);
 
+        $id_evento = uniqid('event_', true);
+
         Event::create([
+            'id_evento' => $id_evento,
             'titulo' => $request->titulo,
             'descripcion' => $request->descripcion,
             'organizador' => $request->organizador,
@@ -78,17 +76,34 @@ class EventController extends Controller
         return redirect()->route('events.index')->with('success', 'Evento creado con éxito');
     }
 
-    public function destroy($id_evento)
+    public function storeComment(Request $request, $id_evento)
     {
-        $event =$event = Event::findOrFail($id_evento);
+        $request->validate([
+            'contenido' => 'required|string|max:500',
+            'event_id' => 'required|exists:events,id_evento', // Asegúrate de validar el evento
+        ]);
 
-        // Verifica que el usuario sea el creador del evento
-        if ($event->user_id === auth()->user()->id) {
-            $event->delete();
-            return redirect()->route('index')->with('success', 'Evento eliminado con éxito.');
-        } else {
-            return redirect()->route('index')->with('error', 'No tienes permiso para eliminar este evento.');
-        }
+        $comentario = new Comentario();
+        $comentario->contenido = $request->contenido;
+        $comentario->event_id = $request->event_id;
+        $comentario->user_id = auth()->user()->id;
+        $comentario->save();
+
+        return redirect()->route('events.show', $id_evento)->with('success', 'Comentario agregado exitosamente');
     }
+
+
+    public function destroy($id_evento)
+{
+    $event = Event::where('id_evento', $id_evento)->firstOrFail();
+
+    if ($event->user_id === auth()->user()->id) {
+        $event->delete();
+        return redirect()->route('events.index')->with('success', 'Evento eliminado con éxito.');
+    } else {
+        return redirect()->route('events.index')->with('error', 'No tienes permiso para eliminar este evento.');
+    }
+}
+
 
 }

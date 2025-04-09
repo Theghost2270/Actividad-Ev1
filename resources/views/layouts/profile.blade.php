@@ -52,6 +52,7 @@
             margin: 0;
             font-size: 20px;
         }
+        
         .img_header{
             width: 160px;
         }
