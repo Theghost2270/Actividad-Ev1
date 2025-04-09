@@ -16,7 +16,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color:rgba(21, 25, 29, 0.74);
+            background-color:rgba(54, 54, 59, 0.74);
             padding: 10px 20px;
         }
         .header h1 {

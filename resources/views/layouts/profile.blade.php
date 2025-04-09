@@ -18,12 +18,16 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color:rgb(14, 17, 19);
+            background-color:rgba(54, 54, 59, 0.74);
             padding: 10px 20px;
         }
         .header h1 {
             margin: 0;
             font-size: 18px;
+        }
+        .icons {
+            display: flex;
+            gap: 15px;
         }
         .container {
             background-color: rgba(48, 48, 48, 0.77);
@@ -75,10 +79,12 @@
     <span class="link">👤 <a href="{{ route('profile.show') }}">{{ Auth::user()->name }}</a></span>
         <h1><a href="{{ route('index') }}"><img class="img_header" src="https://i.ibb.co/KjB2J0DH/Comm-3-removebg-preview.png" alt="Community App"></a></h1>
         <div class="icons">
+            
+            <a href="{{ route('events.create') }}"><img class="img_header1" src="https://cdn-icons-png.flaticon.com/128/1237/1237946.png" alt="Crear Evento"></a>
             <form action="{{ route('logout') }}" method="POST">
-                @csrf
-                <button style="background: none; border: none; color: white; cursor: pointer;">🚪 Cerrar sesión</button>
-            </form>
+            @csrf
+            <button style="background: none; border: none; color: white; cursor: pointer;">🚪 Cerrar sesión</button>
+        </form>
         </div>
     </div>
 

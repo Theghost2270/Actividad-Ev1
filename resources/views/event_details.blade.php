@@ -16,7 +16,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color:rgba(21, 25, 29, 0.74);
+            background-color:rgba(54, 54, 59, 0.74);
             padding: 10px 20px;
         }
         .header h1 {
@@ -32,20 +32,19 @@
         }
         .event-card {
             background-color: rgba(48, 48, 48, 0.77);
-            padding: 15px;
+            padding: 20px;
             margin: 30px;
+            color: white;
             border-radius: 10px;
+            cursor: pointer;
         }
         .event-card h2 {
-            margin: 0 0 10px;
-            font-size: 16px;
+            margin: 0;
+            font-size: 20px;
         }
-        .event-card p {
-            margin: 5px 0;
-            font-size: 14px;
-        }
-        .event-card strong {
-            display: block;
+        .event-card h3 {
+            margin: 0;
+            font-size: 20px;
         }
         .map {
             width: 100%;
@@ -95,6 +94,7 @@
             color:rgb(152, 176, 199);
             text-decoration: none;
         }
+        
     </style>
 </head>
 <body>
@@ -109,7 +109,7 @@
         </div>
     </div>
     
-        <div class="event-card">
+        <div class="event-card ">
             <h2>{{ $event->titulo }}</h2>
             <p>{{ $event->descripcion }}</p>
             <p><strong>Organizador:</strong> {{ $event->organizador }}</p>
@@ -117,6 +117,7 @@
             <p><strong>Categoría:</strong> {{ $event->tematica }}</p>
             <p><strong>Edad mínima:</strong> {{ $event->edad_minima }}</p>
             <p><strong>Ubicación:</strong> {{ $event->ubicacion }}</p>
+            <p><strong>Fecha del evento:</strong> {{ $event->fecha }}</p>
             <p><strong>Hora de inicio:</strong> {{ $event->hora }}</p>
             <p><strong>Contacto:</strong> {{ $event->contacto }}</p>
         </div>
